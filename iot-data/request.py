@@ -2,30 +2,33 @@ import requests, json, random, subprocess
 from datetime import datetime, timezone
 from time import sleep
 
-CAUSES = ['BATTERY', 'LIGHT', 'TEMPERATURE', 'MOVEMENT']
-STATUS = ['ACTIVE', 'INACTIVE', 'ALARMED', 'SILENCED']
+TENANT = "4efbe1b0-59e4-4cb6-9679-ab52367f52a8"
+
+CAUSES = ["BATTERY", "LIGHT", "TEMPERATURE", "MOVEMENT"]
+STATUS = ["ACTIVE", "INACTIVE", "ALARMED", "SILENCED"]
+
 
 def Main():
     try:
+        status = STATUS[int(input(f"Select a status:\n{STATUS}\n")) - 1]
+
         while True:
             timestamp = datetime.now(timezone.utc).isoformat()
             r = random.randint(0, 4)
 
             reasons = []
             for _ in range(r):
-                status = random.choice(STATUS)
                 cause = random.choice(CAUSES)
-                
                 if cause.upper() not in reasons:
                     reasons.append(cause.upper())
 
-            print(f'Populating data...\nCauses: {reasons}\nStatus: {status}')
+            print(f"Populating data...\nCauses: {reasons}\nStatus: {status}")
 
             payload = {
                 "timestamp": timestamp,
-                "tenantId": "4efbe1b0-59e4-4cb6-9679-ab52367f52a8",
-                "reasons": reasons, 
-                "status": status.upper(),
+                "tenantId": TENANT,
+                "reasons": reasons,
+                "status": status,
                 "device": {
                     "id": "227038a7-439b-45e7-949b-cbc312daf0ac",
                     "description": "IoTName",
@@ -43,19 +46,21 @@ def Main():
 
             Status(r)
             sleep(3)
-            subprocess.run('clear')
+            subprocess.run("clear")
 
     except KeyboardInterrupt:
-        print(f'\nStopping...')
+        print(f"\nStopping...")
+
 
 def Status(r: requests.Response):
-    code = r.status_code 
+    code = r.status_code
 
     if code == 204:
-        print(f'{code}: No Content')
+        print(f"{code}: No Content")
     else:
-        print(f'Error: {code}\n{r.text}')
+        print(f"Error: {code}\n{r.text}")
         sleep(2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     Main()

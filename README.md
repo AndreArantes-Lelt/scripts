@@ -1,10 +1,15 @@
-# IoT alarms data population
+# Scripts
 
-- `cd scripts/iot-data`
-  - `make init`
-  - `make run`
+- Before anything, be sure to run:
 
-### Then chose one of the available status:
+  `make init`
+
+
+## IoT alarms data population
+
+  `make run-iot`
+
+Then chose one of the available status:
 
 1. ACTIVE
 2. INACTIVE

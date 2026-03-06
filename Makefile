@@ -6,6 +6,7 @@ PY = $(VENV)/bin/python
 init: $(VENV)
 	$(PIP) install --upgrade pip
 	$(PIP) install requests
+	$(PIP) install mbake
 	$(PIP) install black
 
 $(VENV):
@@ -14,8 +15,15 @@ $(VENV):
 
 .PHONY: format
 format:
-	$(VENV)/bin/black request.py
+	$(VENV)/bin/mbake format Makefile
+	$(VENV)/bin/black */main.py
 
-.PHONY: run-iot
-run-iot: 
+.PHONY: iot
+iot:
 	$(PY) iot-data/main.py
+
+.PHONY: fix-db
+fix-db:
+	sh database/start.sh
+	sh database/drop.sh
+	sh database/create.sh

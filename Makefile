@@ -15,11 +15,13 @@ $(VENV):
 
 .PHONY: format
 format:
+	chmod +x */*.sh 
 	$(VENV)/bin/mbake format Makefile
 	$(VENV)/bin/black */main.py
 
 .PHONY: iot
 iot:
+	sh database/start.sh
 	$(PY) iot-data/main.py
 
 .PHONY: fix-db
